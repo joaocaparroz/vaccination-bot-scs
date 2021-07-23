@@ -23,12 +23,13 @@ def check_website():
         availability = extract_availability(
             card.find('div', {'class': 'row', 'style': 'width:98%;margin-left:auto;margin-right:auto;'}).find(
                 'span').text)
-        age, dose = extract_age_and_dose(
+        age, dose, group = extract_age_and_dose(
             card.find('div', {'class': 'row', 'style': 'margin-top:10px;'}).find('h6').text)
 
         result_list.append({'availability': availability,
                             'age': age,
-                            'dose': dose})
+                            'dose': dose,
+                            'group': group})
 
     logging.info('Data successfully extracted.')
     return result_list
@@ -42,8 +43,12 @@ def extract_age_and_dose(age_string: str):
     age = re.search(r'(\d{1,2}) anos', age_string)
     if age:
         age_num = int(age.group(1))
+        group_string = None
     else:
         age_num = None
+        group_string = re.search(r'#Vacina São Caetano (.*) \dª Dose', age_string).group(1)
+        group_string = group_string.replace('-', '')
+        group_string = group_string.strip()
 
     dose = re.search(r'(\d)ª Dose', age_string)
     if dose:
@@ -51,7 +56,7 @@ def extract_age_and_dose(age_string: str):
     else:
         dose_num = None
 
-    return age_num, dose_num
+    return age_num, dose_num, group_string
 
 
 def check_need_to_send_message(vaccine_list: list, save: bool = True):

@@ -21,17 +21,17 @@ def send_pushbullet_message(vaccine_list: list):
 
 
 def build_message(vaccine_list: list):
-    message_list = []
+    message_list = ['Agendamentos Disponíveis:']
     for vaccine in vaccine_list:
         message = ''
-        if vaccine['availability']:
-            message += 'Disponível'
-        else:
-            message += 'Indisponível'
+        if vaccine["age"]:
+            message += f'  - {vaccine["age"]} anos ou mais - {vaccine["dose"]}ª dose.'
+        elif vaccine["group"]:
+            message += f'  - {vaccine["group"]} - {vaccine["dose"]}ª dose.'
 
-        message += f' - {vaccine["age"]} anos ou mais - {vaccine["dose"]}ª dose.'
         message_list.append(message)
 
+    message_list.append('')
     message_list.append('Faça seu agendamento em https://portais.saocaetanodosul.sp.gov.br/sesaud-agendamentos')
 
     logging.info('Message sent successfully.')
