@@ -18,6 +18,7 @@ def send_pushbullet_message(vaccine_list: list):
     pb = Pushbullet(api_key)
     vaccine_channel = pb.get_channel(PUSHBULLET_CHAT_ID)
     vaccine_channel.push_note("Novas informações sobre vacina em São Caetano do Sul!", message_to_send)
+    logging.info('Pushbullet channel message sent.')
 
 
 def build_message(vaccine_list: list):
@@ -34,7 +35,7 @@ def build_message(vaccine_list: list):
     message_list.append('')
     message_list.append('Faça seu agendamento em https://portais.saocaetanodosul.sp.gov.br/sesaud-agendamentos')
 
-    logging.info('Message sent successfully.')
+    logging.info('Message built successfully.')
     return '\n'.join(message_list)
 
 
@@ -42,4 +43,4 @@ def send_telegram_message(vaccine_list: list):
     logging.info('Trying to send message to the Telegram group...')
     bot = telegram.Bot(token=TELEGRAM_API_KEY)
     bot.send_message(text=build_message(vaccine_list), chat_id=int(TELEGRAM_CHAT_ID))
-    logging.info('Message sent successfully.')
+    logging.info('Telegram message sent.')
